@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Daftar - Sleepy Panda</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -293,6 +294,208 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Forgot Password Slide-Up Panel */
+        .forgot-password-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .forgot-password-backdrop.active {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 1;
+            padding-bottom: 0;
+        }
+
+        .forgot-password-panel {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 100%);
+            width: 90%;
+            max-width: 380px;
+            background: rgba(30, 33, 66, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px 20px 0 0;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-bottom: none;
+            padding: 50px 40px 40px;
+            z-index: 9999;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(0, 191, 165, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            opacity: 1;
+            visibility: hidden;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.4s;
+        }
+
+        .forgot-password-panel.active {
+            visibility: visible;
+            transform: translate(-50%, 0);
+        }
+
+        .panel-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .panel-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin: 0 0 10px 0;
+        }
+
+        .panel-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .panel-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .panel-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .panel-form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .panel-form-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 16px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .panel-input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #1a1d3f;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .panel-input:focus {
+            outline: none;
+            border-color: #00bfa5;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.1);
+        }
+
+        .panel-input::placeholder {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .panel-btn {
+            width: 100%;
+            padding: 14px;
+            background: #00bfa5;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .panel-btn:hover:not(:disabled) {
+            background: #00d4b8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 191, 165, 0.3);
+        }
+
+        .panel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .panel-alert {
+            padding: 16px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.6;
+        }
+
+        .panel-alert span {
+            flex: 1;
+        }
+
+        .panel-alert.success {
+            background: rgba(0, 191, 165, 0.2);
+            border: 1px solid rgba(0, 191, 165, 0.5);
+            color: #00bfa5;
+        }
+
+        .panel-alert.error {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.5);
+            color: #ff6b6b;
+        }
+
+        .forgot-link {
+            text-align: right;
+            margin-top: 6px;
+            margin-bottom: 24px;
+        }
+
+        .forgot-link a {
+            font-size: 12px;
+            color: #00bfa5;
+            text-decoration: none;
+            font-weight: 400;
+        }
+
+        .forgot-link a:hover {
+            color: #00d4b8;
+        }
     </style>
 </head>
 
@@ -322,6 +525,10 @@
                     <div class="error-message" id="passwordError"></div>
                 </div>
 
+                <div class="forgot-link">
+                    <a href="#" onclick="openForgotPasswordPanel(); return false;">Lupa password?</a>
+                </div>
+
                 <button type="submit" class="btn btn-primary" id="registerBtn" disabled>Daftar</button>
             </form>
 
@@ -342,7 +549,123 @@
         </div>
     </div>
 
+    <!-- Forgot Password Slide-Up Panel -->
+    <div class="forgot-password-backdrop" id="forgotPasswordBackdrop" onclick="closeForgotPasswordPanel()"></div>
+    <div class="forgot-password-panel" id="forgotPasswordPanel">
+        <button class="panel-close" onclick="closeForgotPasswordPanel()">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="panel-header">
+            <h3>Lupa password?</h3>
+        </div>
+
+        <p class="panel-description">
+            Instruksi untuk melakukan reset password akan<br>
+            dikirim melalui email yang kamu gunakan untuk<br>
+            mendaftar
+        </p>
+
+        <div id="forgotPasswordAlert"></div>
+
+        <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+            @csrf
+            <div class="panel-form-group">
+                <i class="fa-regular fa-envelope"></i>
+                <input type="email" id="forgotEmail" name="email" class="panel-input" placeholder="Email" required>
+            </div>
+
+            <button type="submit" class="panel-btn" id="forgotPasswordBtn">
+                Reset Password
+            </button>
+        </form>
+    </div>
+
     <script>
+        // Forgot Password Panel Functions
+        function openForgotPasswordPanel() {
+            const backdrop = document.getElementById('forgotPasswordBackdrop');
+            const panel = document.getElementById('forgotPasswordPanel');
+
+            backdrop.classList.add('active');
+            setTimeout(() => {
+                panel.classList.add('active');
+            }, 10);
+        }
+
+        function closeForgotPasswordPanel() {
+            const backdrop = document.getElementById('forgotPasswordBackdrop');
+            const panel = document.getElementById('forgotPasswordPanel');
+            const alertBox = document.getElementById('forgotPasswordAlert');
+
+            panel.classList.remove('active');
+            setTimeout(() => {
+                backdrop.classList.remove('active');
+                // Clear alert after closing
+                alertBox.innerHTML = '';
+            }, 400);
+        }
+
+        function showPanelAlert(type, message) {
+            const alertBox = document.getElementById('forgotPasswordAlert');
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+            alertBox.innerHTML = `
+                <div class="panel-alert ${type}">
+                    <i class="fas ${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+        }
+
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const submitBtn = document.getElementById('forgotPasswordBtn');
+            const emailInput = document.getElementById('forgotEmail');
+            const formData = new FormData(form);
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+
+            try {
+                const response = await fetch('{{ route('password.email') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || document
+                            .querySelector('input[name="_token"]').value
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showPanelAlert('success', data.message);
+
+                    // Clear form
+                    emailInput.value = '';
+
+                    // Close panel after 4 seconds
+                    setTimeout(() => {
+                        closeForgotPasswordPanel();
+                    }, 4000);
+                } else {
+                    showPanelAlert('error', data.message || 'Terjadi kesalahan. Silakan coba lagi.');
+                }
+            } catch (error) {
+                showPanelAlert('error', 'Terjadi kesalahan. Silakan coba lagi.');
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Reset Password';
+            }
+        }
+
+        // Register Form Functions
         const form = document.getElementById('registerForm');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
