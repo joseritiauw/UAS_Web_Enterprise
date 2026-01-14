@@ -626,6 +626,15 @@
             const emailInput = document.getElementById('forgotEmail');
             const formData = new FormData(form);
 
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ||
+                document.querySelector('input[name="_token"]')?.value;
+
+            // Add CSRF token to FormData if not already present
+            if (!formData.has('_token') && csrfToken) {
+                formData.append('_token', csrfToken);
+            }
+
             // Disable button and show loading
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
@@ -635,9 +644,7 @@
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || document
-                            .querySelector('input[name="_token"]').value
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
                 });
 
