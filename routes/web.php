@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TokenController;
 
 // Welcome page
 Route::get('/', function () {
@@ -33,4 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/reset-password-user', [DashboardController::class, 'resetPasswordUser'])->name('reset.password');
     Route::post('/reset-password-user', [DashboardController::class, 'resetPasswordUserPost'])->name('reset.password.post');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Token management routes
+    Route::get('/api/token/check', [TokenController::class, 'checkTokenExpiry'])->name('token.check');
+    Route::post('/api/token/refresh', [TokenController::class, 'refreshToken'])->name('token.refresh');
+    Route::post('/api/token/revoke-all', [TokenController::class, 'revokeAllTokens'])->name('token.revoke.all');
+    Route::get('/api/token/all', [TokenController::class, 'getAllUserTokens'])->name('token.all');
 });

@@ -20,9 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Configure Passport token expiry to 30 minutes
+        // Configure Passport token expiry - ALL TOKENS 30 MINUTES
+        // Passport uses RS256 (RSA with SHA-256) by default for JWT signing
         Passport::tokensExpireIn(now()->addMinutes(30));
         Passport::refreshTokensExpireIn(now()->addDays(30));
-        Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+        Passport::personalAccessTokensExpireIn(now()->addMinutes(30)); // Changed to 30 minutes
     }
 }

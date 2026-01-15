@@ -368,7 +368,7 @@
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .sidebar {
                 position: fixed;
                 left: -270px;
@@ -376,10 +376,15 @@
                 height: 100vh;
                 z-index: 1000;
                 transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
             }
 
             .sidebar.active {
                 left: 0;
+            }
+
+            .main-content {
+                width: 100%;
             }
 
             .stats-grid {
@@ -395,13 +400,71 @@
             }
 
             .search-box {
-                width: 200px;
+                display: none;
+            }
+
+            .header-left {
+                gap: 10px;
+            }
+
+            .header-logo h2 {
+                font-size: 18px;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
             .stats-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+
+        /* Mobile Menu Overlay */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Hamburger Button */
+        .hamburger-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 992px) {
+            .hamburger-btn {
+                display: block;
             }
         }
     </style>
@@ -410,9 +473,17 @@
 </head>
 
 <body>
+    <!-- Mobile Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMobileMenu()"></div>
+
     <div class="dashboard-container">
-        <div class="sidebar">
-            <div class="admin-site-label">Admin Site</div>
+        <div class="sidebar" id="sidebar">
+            <div class="admin-site-label">
+                Admin Site
+                <button class="hamburger-btn" onclick="toggleMobileMenu()" style="float: right; margin-top: -5px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
             <div class="sidebar-menu">
                 <a href="{{ route('dashboard') }}"
@@ -460,6 +531,9 @@
         <div class="main-content">
             <div class="top-header">
                 <div class="header-left">
+                    <button class="hamburger-btn" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <div class="header-logo">
                         <div class="logo"><img src="{{ asset('images/panda.png') }}" alt="Panda Logo"
                                 style="width: 40px; height: 40px; object-fit: contain;"></div>
@@ -483,6 +557,36 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('menuOverlay');
+
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Close menu when clicking menu item (on mobile)
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 992) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // Close menu on window resize if desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 992) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('menuOverlay');
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+    </script>
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

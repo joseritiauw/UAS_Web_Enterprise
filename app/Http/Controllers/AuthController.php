@@ -240,24 +240,27 @@ class AuthController extends Controller
 
             if ($mailConfigured) {
                 // Kirim email jika sudah dikonfigurasi
-                Mail::send('emails.forgot-password', [
-                    'otp' => $otp,
-                    'resetToken' => $resetToken,
-                    'email' => $email
-                ], function ($message) use ($email) {
-                    $message->to($email);
-                    $message->subject('Reset Password - Sleepy Panda');
-                });
+                try {
+                    Mail::send('emails.forgot-password', [
+                        'otp' => $otp,
+                        'resetToken' => $resetToken,
+                        'email' => $email
+                    ], function ($message) use ($email) {
+                        $message->to($email);
+                        $message->subject('Reset Password - Sleepy Panda');
+                    });
 
-                // Check if there were any failures
-                if (count(Mail::failures()) > 0) {
-                    throw new \Exception('Gagal mengirim email. Periksa konfigurasi SMTP.');
+                    \Log::info('Password Reset Email Sent', [
+                        'email' => $email,
+                        'otp' => $otp
+                    ]);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send password reset email', [
+                        'email' => $email,
+                        'error' => $e->getMessage()
+                    ]);
+                    throw new \Exception('Gagal mengirim email: ' . $e->getMessage());
                 }
-
-                \Log::info('Password Reset Email Sent', [
-                    'email' => $email,
-                    'otp' => $otp
-                ]);
             } else {
                 // Development mode - log OTP dan token
                 \Log::info('Password Reset Request (Development Mode)', [
